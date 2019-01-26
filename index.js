@@ -22,15 +22,22 @@ app.get('/auth_token', function(req, res) {
 	try {
 		state = JSON.parse(state_encoded);
 	} catch(err) {
-		res.status(500).send({error: 'invalid JSON'});
+		res.status(400).send({error: 'invalid JSON'});
 		return;
 	}
-	rsmartcar.get("vehicles", code, function(error) {
+	rsmartcar.get("vehicles", code, function(data, error) {
 		if(error) {
-			res.status(500).send({error: 'unable to fetch'});
+			res.status(400).send({error: 'unable to fetch'});
 			return;
 		}
-		res.send("<script>window.postmessage('" + vehicle_id + "');</script>");
+		if(data["paging"]["offset"] != 0) {
+			res.status(400).send({error: 'offset is nonzero'});
+			return;
+		}
+		if(data["vehicles"].length > 1) {
+			res.status(400).send({error: 'too many vehicles'});
+		}
+		res.send("<script>window.postmessage('" + escape(data["vehicles"][0]) + "');</script>");
 	});
 });
 
