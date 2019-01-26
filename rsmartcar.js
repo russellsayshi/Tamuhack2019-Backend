@@ -4,7 +4,7 @@ const base_smartcar_uri = "https://api.smartcar.com/v1.0/";
 exports.get = function(url, token, callback) {
 	request({
 		headers: {
-			'Authorization: Bearer {' + token + '}'
+			'Authorization': 'Bearer {' + token + '}'
 		},
 		uri: base_smartcar_uri + url,
 		method: 'GET'
