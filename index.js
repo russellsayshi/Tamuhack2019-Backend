@@ -4,13 +4,12 @@ const app = express();
 const reids = require("redis"),
 	client = redis.createClient();
 const request = require("request");
+const rsmartcar = require("./rsmartcar.js");
 const port = 3000;
 
 client.on("error", function (err) {
 	console.log("Error " + err);
 });
-
-
 
 const secrets = JSON.parse(fs.readFileSync("secrets.txt"));
 
@@ -26,7 +25,13 @@ app.get('/auth_token', function(req, res) {
 		res.status(500).send({error: 'invalid JSON'});
 		return;
 	}
-	
+	rsmartcar.get("vehicles", code, function(error) {
+		if(error) {
+			res.status(500).send({error: 'unable to fetch'});
+			return;
+		}
+		res.send("<script>window.postmessage('" + vehicle_id + "');</script>");
+	});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
