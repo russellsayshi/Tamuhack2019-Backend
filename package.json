@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.16.4",
-    "mongodb": "^3.1.13",
+    "redis": "^2.8.0",
     "request": "^2.88.0"
   },
   "devDependencies": {},
