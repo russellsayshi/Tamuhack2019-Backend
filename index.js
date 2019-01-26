@@ -11,7 +11,7 @@ client.on("error", function (err) {
 	console.log("Error " + err);
 });
 
-const secrets = JSON.parse(fs.readFileSync("secrets.txt"));
+const secrets = JSON.parse(fs.readFileSync("secret.txt"));
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
