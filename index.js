@@ -48,7 +48,7 @@ app.get('/vid', (req, res) => return "");
 app.get('/get_message', function(req, res) {
 	var car = cars[req.query.car];
 	if(car) {
-		return car["messages"];
+		return JSON.stringify(car["messages"]);
 	}
 	res.status(400).send({error: 'invalid car'});
 });
@@ -56,7 +56,7 @@ app.get('/get_message', function(req, res) {
 app.get('/get_info', function(req, res) {
 	var car = cars[req.query.car];
 	if(car) {
-		return car["info"];
+		return JSON.stringify(car["info"]);
 	}
 	res.status(400).send({error: 'invalid car'});
 });
