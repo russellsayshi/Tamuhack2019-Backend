@@ -7,6 +7,8 @@ const request = require("request");
 const rsmartcar = require("./rsmartcar.js");
 const port = 3000;
 
+let cars = {};
+
 client.on("error", function (err) {
 	console.log("Error " + err);
 });
@@ -37,8 +39,26 @@ app.get('/auth_token', function(req, res) {
 		if(data["vehicles"].length > 1) {
 			res.status(400).send({error: 'too many vehicles'});
 		}
-		res.send("<script>window.postmessage('" + escape(data["vehicles"][0]) + "');</script>");
+		res.send("<script>window.location.href = '/vid?vid=" + escape(data["vehicles"][0]) + "';</script>");
 	});
+});
+
+app.get('/vid', (req, res) => return "");
+
+app.get('/get_message', function(req, res) {
+	var car = cars[req.query.car];
+	if(car) {
+		return car["messages"];
+	}
+	res.status(400).send({error: 'invalid car'});
+});
+
+app.get('/get_info', function(req, res) {
+	var car = cars[req.query.car];
+	if(car) {
+		return car["info"];
+	}
+	res.status(400).send({error: 'invalid car'});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
