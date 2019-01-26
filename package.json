@@ -1,0 +1,27 @@
+{
+  "name": "tamuhack2019-backend",
+  "version": "0.0.1",
+  "description": "carma",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo 'no test'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/russellsayshi/Tamuhack2019-Backend.git"
+  },
+  "keywords": [
+    "tamuhack",
+    "carma"
+  ],
+  "author": "idek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/russellsayshi/Tamuhack2019-Backend/issues"
+  },
+  "homepage": "https://github.com/russellsayshi/Tamuhack2019-Backend#readme"
+}
