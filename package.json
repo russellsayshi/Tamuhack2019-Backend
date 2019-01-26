@@ -6,7 +6,8 @@
   "dependencies": {
     "express": "^4.16.4",
     "redis": "^2.8.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "smartcar": "^4.2.1"
   },
   "devDependencies": {},
   "scripts": {

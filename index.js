@@ -20,7 +20,7 @@ app.get('/auth_token', function(req, res) {
 		res.status(500).send({error: 'invalid JSON'});
 		return;
 	}
-	
+	request("
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
