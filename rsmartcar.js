@@ -10,7 +10,7 @@ exports.get = function(url, token, callback) {
 		method: 'GET'
 	},
 	function(err, res, body) {
-		if(error) {
+		if(err) {
 			callback({}, error)
 			return;
 		}
