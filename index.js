@@ -41,6 +41,7 @@ app.get('/auth_token', function(req, res) {
 				res.status(400).send({'error': 'unable to fetch'});
 				return;
 			}
+			console.log("fetching vehicles. data: " + JSON.stringify(data));
 			if(data["paging"]["offset"] != 0) {
 				res.status(400).send({'error': 'offset is nonzero'});
 				return;
