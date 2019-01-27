@@ -94,7 +94,7 @@ app.get('/message', function(req, res) {
 	let our_id = req.query.id;
 	for(const car_id of Object.keys(cars)) {
 		if(our_id != car_id) {
-			candidates.push(req.query.content);
+			cars[car_id]['messages'].push(req.query.content);
 		}
 	}
 	return "success";
