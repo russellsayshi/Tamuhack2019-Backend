@@ -17,7 +17,7 @@ client.on("error", function (err) {
 
 const secrets = JSON.parse(fs.readFileSync("secret.txt"));
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.end('Hello World!'));
 
 //used to register this car
 app.get('/auth_token', function(req, res) {
@@ -30,14 +30,14 @@ app.get('/auth_token', function(req, res) {
 	} catch(err) {
 		console.log("fed bad json: " + state);
 		console.log('reason: ' + err);
-		res.status(400).send({error: 'invalid JSON'});
+		res.status(400).end(JSON.stringify({error: 'invalid JSON'}));
 		return;
 	}
 	
 	rsmartcar.get_token(code, secrets['id'], secrets['sec'], function (get_token_data, get_token_err) {
 		console.log("auth token checkpoint 1");
 		if(get_token_err) {
-			res.status(400).end({'error': 'cannot get token from code'});
+			res.status(400).end(JSON.stringify({'error': 'cannot get token from code'}));
 			return;
 		}
 		let token = get_token_data['access_token']
@@ -46,16 +46,16 @@ app.get('/auth_token', function(req, res) {
 		rsmartcar.get("vehicles", token, function(data, error) {
 			console.log("auth token checkpoint 2");
 			if(error) {
-				res.status(400).end({'error': 'unable to fetch'});
+				res.status(400).end(JSON.stringify({'error': 'unable to fetch'}));
 				return;
 			}
 			console.log("fetching vehicles. data: " + JSON.stringify(data));
 			if(data["paging"]["offset"] != 0) {
-				res.status(400).end({'error': 'offset is nonzero'});
+				res.status(400).end(JSON.stringify({'error': 'offset is nonzero'}));
 				return;
 			}
 			if(data["vehicles"].length > 1) {
-				res.status(400).end({'error': 'too many vehicles'});
+				res.status(400).end(JSON.stringify({'error': 'too many vehicles'}));
 				return;
 			}
 
@@ -64,7 +64,7 @@ app.get('/auth_token', function(req, res) {
 			rsmartcar.vehicle(vehicle_id, "", token, function(data2, err) {
 				console.log("auth token checkpoint 3");
 				if(err) {
-					res.status(400).end({'error': 'could not fetch vehicle info'});
+					res.status(400).end(JSON.stringify({'error': 'could not fetch vehicle info'}));
 					return;
 				}
 				const car = {
@@ -97,6 +97,7 @@ app.get('/message', function(req, res) {
 			cars[car_id]['messages'].push(req.query.content);
 		}
 	}
+    res.end('success');
 	return "success";
 
 	/*let car = cars[req.query.id];
@@ -148,7 +149,7 @@ app.get('/set_location', function(req, res) {
 	let latitude = req.query.lat;
 	cars[id]['longitude'] = longitude;
 	cars[id]['latitude'] = latitude;
-	res.send("SUCccess");
+	res.end("SUCccess");
 });
 
 app.get('/vid', (req, res) => res.end(""));
@@ -157,18 +158,18 @@ app.get('/vid', (req, res) => res.end(""));
 app.get('/get_message', function(req, res) {
 	let car = cars[req.query.id];
 	if(car) {
-		return JSON.stringify(car["messages"]);
+		res.end(JSON.stringify(car["messages"]));
 	}
-	res.status(400).send({error: 'invalid car'});
+	res.status(400).end(JSON.stringify({error: 'invalid car'}));
 });
 
 //get the info for this car
 app.get('/get_info', function(req, res) {
 	let car = cars[req.query.id];
 	if(car) {
-		return JSON.stringify(car["info"]);
+		res.end(JSON.stringify(car["info"]));
 	}
-	res.status(400).send({error: 'invalid car'});
+	res.status(400).end(JSON.stringify({error: 'invalid car'}));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
