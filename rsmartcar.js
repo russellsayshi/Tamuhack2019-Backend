@@ -21,7 +21,7 @@ exports.get = function(url, token, callback) {
 exports.get_token = function(code, client_id, client_secret, callback) {
         request({
 		'headers': {
-			'Authorization': 'Basic base64(' + client_id + ":" +  client_secret + ")",
+			'Authorization': 'Basic ' + btoa(client_id),
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		'uri': 'https://auth.smartcar.com/oauth/token',
