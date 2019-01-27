@@ -7,6 +7,8 @@ const request = require("request");
 const rsmartcar = require("./rsmartcar.js");
 const port = 80;
 
+//magic url: https://connect.smartcar.com/oauth/authorize?mode=test&response_type=code&client_id=5b33ca48-de7e-4619-965e-ecdd4af3d899&scope=read_vehicle_info%20read_location&redirect_uri=http://localhost/auth_token&state=%7B%22color%22%3A%20%22green%22%2C%20%22license%22%3A%20%225PX-7378%22%7D
+
 let cars = {};
 
 client.on("error", function (err) {
@@ -76,8 +78,6 @@ app.get('/auth_token', function(req, res) {
 					"messages": [],
 					"longitude": 0,
 					"latitude": 0,
-					"license": state_decoded['license'],
-					"color": state_decoded['color']
 				};
 				cars[vehicle_id] = car; 
 				res.end("<script>window.location.href = '/vid?vid=" + escape(vehicle_id) + "';</script>");
