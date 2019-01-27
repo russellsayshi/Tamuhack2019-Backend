@@ -17,6 +17,7 @@ const secrets = JSON.parse(fs.readFileSync("secret.txt"));
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
+//used to register this car
 app.get('/auth_token', function(req, res) {
 	let code = req.query.code;
 	let state = req.query.state;
@@ -49,6 +50,8 @@ app.get('/auth_token', function(req, res) {
 			if(data["vehicles"].length > 1) {
 				res.status(400).send({'error': 'too many vehicles'});
 			}
+
+			//add this car to the list
 			const vehicle_id = data["vehicles"][0];
 			rsmartcar.vehicle(vehicle_id, "", token, function(data2, err) {
 				if(err) {
@@ -74,6 +77,8 @@ app.get('/auth_token', function(req, res) {
 	});	
 });
 
+//called when a message is sent to the server
+//TODO: add liscense plate matching functionality
 app.get('/message', function(req, res) {
 	let car = cars[req.query.id];
 	let content = req.query.content;
@@ -85,6 +90,8 @@ app.get('/message', function(req, res) {
 
 	let candidates = [];
 	
+	//linear search for matching makes
+	//TODO: Match color, model too
 	for(const car_id of Object.keys(cars)) {
 		let car = cars[car_id];
 		if(car['make'] === make) {
@@ -97,6 +104,7 @@ app.get('/message', function(req, res) {
 		return;	
 	}
 
+	//find the closest car to our car
 	let best_score = Number.MAX_VALUE;
 	let best_index = 0;
 	for(let i = 0; i < candidates.length; i++) {
@@ -109,10 +117,13 @@ app.get('/message', function(req, res) {
 		}
 	}
 
+
 	cars[candidates[i]]['messages'].push(content);
+	//3 cs
 	res.send("SUCCCess");
 });
 
+//set the location of this car in the database
 app.get('/set_location', function(req, res) {
 	let id = req.query.id;
 	let longitude = req.query.long;
@@ -124,6 +135,7 @@ app.get('/set_location', function(req, res) {
 
 app.get('/vid', (req, res) => "");
 
+//receive message from server
 app.get('/get_message', function(req, res) {
 	let car = cars[req.query.id];
 	if(car) {
@@ -132,6 +144,7 @@ app.get('/get_message', function(req, res) {
 	res.status(400).send({error: 'invalid car'});
 });
 
+//get the info for this car
 app.get('/get_info', function(req, res) {
 	let car = cars[req.query.id];
 	if(car) {
