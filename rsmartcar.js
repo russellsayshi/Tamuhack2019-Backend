@@ -28,7 +28,7 @@ exports.get_token = function(code, client_id, client_secret, callback) {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		'uri': 'https://auth.smartcar.com/oauth/token',
-		'body': 'grant_type=authorization_code&code=' + code + '&redirect_uri=http://localhost/auth_token&mode=test',
+		'body': 'grant_type=authorization_code&code=' + code + '&redirect_uri=https://getcarma.org/auth_token&mode=test',
 		'method': 'POST',	
 	},
 	function(err, res, body) {
