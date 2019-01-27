@@ -90,7 +90,16 @@ app.get('/auth_token', function(req, res) {
 //called when a message is sent to the server
 //TODO: add liscense plate matching functionality
 app.get('/message', function(req, res) {
-	let car = cars[req.query.id];
+	//car id, color, make, model
+	let our_id = req.query.id;
+	for(const car_id of Object.keys(cars)) {
+		if(our_id != car_id) {
+			candidates.push(req.query.content);
+		}
+	}
+	return "success";
+
+	/*let car = cars[req.query.id];
 	let content = req.query.content;
 	let make = req.query.make;
 	let longitude = req.query.long;
@@ -129,7 +138,7 @@ app.get('/message', function(req, res) {
 
 	cars[candidates[i]]['messages'].push(content);
 	//3 cs
-	res.send("SUCCCess");
+	res.send("SUCCCess");*/
 });
 
 //set the location of this car in the database
