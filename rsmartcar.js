@@ -24,11 +24,11 @@ exports.get_token = function(code, client_id, client_secret, callback) {
 	console.log('Authorization: Basic ' + btoa(client_id));
         request({
 		'headers': {
-			'Authorization': 'Basic ' + btoa(client_id),
+			'Authorization': 'Basic ' + btoa(client_id + ":" + client_secret),
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		'uri': 'https://auth.smartcar.com/oauth/token',
-		'body': 'grant_type=authorization_code&code=' + code + '&redirect_uri=http://localhost/auth_token',
+		'body': 'grant_type=authorization_code&code=' + code + '&redirect_uri=http://localhost/auth_token&mode=test',
 		'method': 'POST',	
 	},
 	function(err, res, body) {

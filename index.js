@@ -35,6 +35,7 @@ app.get('/auth_token', function(req, res) {
 			return;
 		}
 		let token = dataew6234['access_token']
+        console.log(dataew6234);
 		let refresh_token = dataew6234['refresh_token']
 		rsmartcar.get("vehicles", token, function(data, error) {
 			if(error) {
