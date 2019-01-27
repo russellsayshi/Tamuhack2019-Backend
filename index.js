@@ -97,7 +97,6 @@ app.get('/message', function(req, res) {
 	let latitude = req.query.lat;
 
 	// at some point we should validate this crap
-
 	let candidates = [];
 	
 	//linear search for matching makes
