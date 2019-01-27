@@ -115,7 +115,11 @@ app.get('/message', function(req, res) {
 
 app.get('/set_location', function(req, res) {
 	let id = req.query.id;
-	
+	let longitude = req.query.long;
+	let latitude = req.query.lat;
+	cars[id]['longitude'] = longitude;
+	cars[id]['latitude'] = latitude;
+	res.send("SUCccess");
 });
 
 app.get('/vid', (req, res) => "");
