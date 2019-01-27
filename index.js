@@ -27,7 +27,6 @@ app.get('/auth_token', function(req, res) {
 		res.status(400).send({error: 'invalid JSON'});
 		return;
 	}
-	// get the token from the code
 	
 	rsmartcar.get_token(code, secrets['id'], secrets['sec'], function (get_token_data, get_token_err) {
 		if(get_token_err) {
