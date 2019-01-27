@@ -1,4 +1,5 @@
 const request = require("request");
+const btoa = require("btoa");
 
 const base_smartcar_uri = "https://api.smartcar.com/v1.0/";
 exports.get = function(url, token, callback) {
