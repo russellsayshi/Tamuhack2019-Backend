@@ -4,6 +4,7 @@
   "description": "carma",
   "main": "index.js",
   "dependencies": {
+    "btoa": "^1.2.1",
     "express": "^4.16.4",
     "redis": "^2.8.0",
     "request": "^2.88.0"
