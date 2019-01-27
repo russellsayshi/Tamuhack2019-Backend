@@ -70,7 +70,7 @@ app.get('/auth_token', function(req, res) {
 	});	
 });
 
-app.get('/vid', (req, res) => return "");
+app.get('/vid', (req, res) => "");
 
 app.get('/get_message', function(req, res) {
 	var car = cars[req.query.car];
