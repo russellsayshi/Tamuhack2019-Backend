@@ -29,7 +29,7 @@ exports.get_token = function(code, client_id, client_secret, callback) {
 		'method': 'POST',	
 	},
 	function(err, res, body) {
-		if(error) {
+		if(err) {
 			callback({}, error);
 			return;
 		}
