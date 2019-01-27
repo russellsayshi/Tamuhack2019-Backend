@@ -3,6 +3,7 @@ const btoa = require("btoa");
 
 const base_smartcar_uri = "https://api.smartcar.com/v1.0/";
 exports.get = function(url, token, callback) {
+	console.log('Authorization: Bearer ' + token);
 	request({
 		headers: {
 			'Authorization': 'Bearer ' + token
@@ -20,6 +21,7 @@ exports.get = function(url, token, callback) {
 }
 
 exports.get_token = function(code, client_id, client_secret, callback) {
+	console.log('Authorization: Basic ' + btoa(client_id));
         request({
 		'headers': {
 			'Authorization': 'Basic ' + btoa(client_id),
