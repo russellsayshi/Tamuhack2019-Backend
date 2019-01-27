@@ -19,43 +19,50 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 //used to register this car
 app.get('/auth_token', function(req, res) {
+	console.log("auth token checkpoint 0");
 	let code = req.query.code;
 	let state = req.query.state;
 	let state_decoded = null;
 	try {
 		state_decoded = JSON.parse(state);
 	} catch(err) {
+		console.log("fed bad json: " + state);
+		console.log('reason: ' + err);
 		res.status(400).send({error: 'invalid JSON'});
 		return;
 	}
 	
 	rsmartcar.get_token(code, secrets['id'], secrets['sec'], function (get_token_data, get_token_err) {
+		console.log("auth token checkpoint 1");
 		if(get_token_err) {
-			res.status(400).send({'error': 'cannot get token from code'});
+			res.status(400).end({'error': 'cannot get token from code'});
 			return;
 		}
 		let token = get_token_data['access_token']
 		console.log(get_token_data);
-		let refresh_token = get_token_data['refresh_token']
+		let refresh_token = get_token_data['refresh_token'];
 		rsmartcar.get("vehicles", token, function(data, error) {
+			console.log("auth token checkpoint 2");
 			if(error) {
-				res.status(400).send({'error': 'unable to fetch'});
+				res.status(400).end({'error': 'unable to fetch'});
 				return;
 			}
 			console.log("fetching vehicles. data: " + JSON.stringify(data));
 			if(data["paging"]["offset"] != 0) {
-				res.status(400).send({'error': 'offset is nonzero'});
+				res.status(400).end({'error': 'offset is nonzero'});
 				return;
 			}
 			if(data["vehicles"].length > 1) {
-				res.status(400).send({'error': 'too many vehicles'});
+				res.status(400).end({'error': 'too many vehicles'});
+				return;
 			}
 
 			//add this car to the list
 			const vehicle_id = data["vehicles"][0];
 			rsmartcar.vehicle(vehicle_id, "", token, function(data2, err) {
+				console.log("auth token checkpoint 3");
 				if(err) {
-					res.status(400).send({'error': 'could not fetch vehicle info'});
+					res.status(400).end({'error': 'could not fetch vehicle info'});
 					return;
 				}
 				const car = {
@@ -71,7 +78,8 @@ app.get('/auth_token', function(req, res) {
 					"latitude": 0,
 				};
 				cars[vehicle_id] = car; 
-				res.send("<script>window.location.href = '/vid?vid=" + escape(vehicle_id) + "';</script>");
+				res.end("<script>window.location.href = '/vid?vid=" + escape(vehicle_id) + "';</script>");
+				console.log("auth ended");
 			});
 		});
 	});	
@@ -133,7 +141,7 @@ app.get('/set_location', function(req, res) {
 	res.send("SUCccess");
 });
 
-app.get('/vid', (req, res) => "");
+app.get('/vid', (req, res) => res.end(""));
 
 //receive message from server
 app.get('/get_message', function(req, res) {
