@@ -76,6 +76,8 @@ app.get('/auth_token', function(req, res) {
 					"messages": [],
 					"longitude": 0,
 					"latitude": 0,
+					"license": state_decoded['license'],
+					"color": state_decoded['color']
 				};
 				cars[vehicle_id] = car; 
 				res.end("<script>window.location.href = '/vid?vid=" + escape(vehicle_id) + "';</script>");
