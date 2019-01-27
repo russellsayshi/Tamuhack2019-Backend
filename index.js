@@ -63,6 +63,9 @@ app.get('/auth_token', function(req, res) {
 					"created": new Date().getTime(),
 					"last_modified": new Date().getTime(),
 					"refresh_token": refresh_token,
+					"messages": [],
+					"longitude": 0,
+					"latitude": 0,
 				};
 				cars[vehicle_id] = car; 
 				res.send("<script>window.location.href = '/vid?vid=" + escape(vehicle_id) + "';</script>");
@@ -71,10 +74,54 @@ app.get('/auth_token', function(req, res) {
 	});	
 });
 
+app.get('/message', function(req, res) {
+	let car = cars[req.query.id];
+	let content = req.query.content;
+	let make = req.query.make;
+	let longitude = req.query.long;
+	let latitude = req.query.lat;
+
+	// at some point we should validate this crap
+
+	let candidates = [];
+	
+	for(const car_id of Object.keys(cars)) {
+		let car = cars[car_id];
+		if(car['make'] === make) {
+			candidates.push(car_id);
+		}
+	}
+
+	if(candidates.length == 0) {
+		res.status(400).send({'error': 'cannot find any cars with matching make'});
+		return;	
+	}
+
+	let best_score = Number.MAX_VALUE;
+	let best_index = 0;
+	for(let i = 0; i < candidates.length; i++) {
+		const long_diff = longitude - cars[candidates[i]]['longitude'];
+		const lat_diff = latitude - cars[candidates[i]]['latitude'];
+		const score = Math.pow(long_diff * long_diff + lat_diff * lat_diff, .5);
+		if(score < best_score) {
+			best_score = score;
+			best_index = i;
+		}
+	}
+
+	cars[candidates[i]]['messages'].push(content);
+	res.send("SUCCCess");
+});
+
+app.get('/set_location', function(req, res) {
+	let id = req.query.id;
+	
+});
+
 app.get('/vid', (req, res) => "");
 
 app.get('/get_message', function(req, res) {
-	var car = cars[req.query.car];
+	let car = cars[req.query.id];
 	if(car) {
 		return JSON.stringify(car["messages"]);
 	}
@@ -82,7 +129,7 @@ app.get('/get_message', function(req, res) {
 });
 
 app.get('/get_info', function(req, res) {
-	var car = cars[req.query.car];
+	let car = cars[req.query.id];
 	if(car) {
 		return JSON.stringify(car["info"]);
 	}
@@ -90,3 +137,4 @@ app.get('/get_info', function(req, res) {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
