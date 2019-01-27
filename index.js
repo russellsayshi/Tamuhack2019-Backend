@@ -1,8 +1,6 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const redis = require("redis");
-const client = redis.createClient();
 const request = require("request");
 const rsmartcar = require("./rsmartcar.js");
 const port = 80;
@@ -11,13 +9,17 @@ const port = 80;
 
 let cars = {};
 
-client.on("error", function (err) {
-	console.log("Error " + err);
-});
-
 const secrets = JSON.parse(fs.readFileSync("secret.txt"));
 
-app.get('/', (req, res) => res.end('Hello World!'));
+app.get('/', (req, res) => {
+	fs.readFile("index.html", function(err, index) {
+		if(err) {
+			res.end({error: "index.html is missing!"});
+			return;
+		}
+		res.end(index);
+	});
+});
 
 //used to register this car
 app.get('/auth_token', function(req, res) {
