@@ -29,14 +29,14 @@ app.get('/auth_token', function(req, res) {
 	}
 	// get the token from the code
 	
-	rsmartcar.get_token(code, secrets['id'], secrets['sec'], function (dataew6234, err3847) {
-		if(err3847) {
+	rsmartcar.get_token(code, secrets['id'], secrets['sec'], function (get_token_data, get_token_err) {
+		if(get_token_err) {
 			res.status(400).send({'error': 'cannot get token from code'});
 			return;
 		}
-		let token = dataew6234['access_token']
-        console.log(dataew6234);
-		let refresh_token = dataew6234['refresh_token']
+		let token = get_token_data['access_token']
+		console.log(get_token_data);
+		let refresh_token = get_token_data['refresh_token']
 		rsmartcar.get("vehicles", token, function(data, error) {
 			if(error) {
 				res.status(400).send({'error': 'unable to fetch'});
